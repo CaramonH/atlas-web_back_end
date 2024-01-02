@@ -1,2 +1,4 @@
+from typing import List, Tuple
+
 def add(a: float, b: float) -> float:
     return a + b
