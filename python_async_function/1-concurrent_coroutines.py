@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 """returns list of random wait times"""
+import asyncio
 from typing import List
 wait_random = __import__('0-basic_async_syntax').wait_random
 
