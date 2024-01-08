@@ -26,3 +26,8 @@ class MRUCache(BaseCaching):
         if key is None or key not in self.cache_data:
             return None
 
+        # Move the most recently used key to the end (MRU algorithm)
+        del self.cache_data[key]
+        self.cache_data[key] = self.cache_data[key]
+
+        return self.cache_data[key]
