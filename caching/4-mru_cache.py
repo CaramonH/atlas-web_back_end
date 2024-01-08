@@ -15,19 +15,20 @@ class MRUCache(BaseCaching):
         """ Adds an item to the console """
         if key is not None and item is not None:
             if len(self.cache_data) >= BaseCaching.MAX_ITEMS:
-                discarded_key = next(iter(self.cache_data))
+                # Get the most recently used key and remove it from the cache
+                discarded_key = max(self.cache_data, key=self.cache_data.get)
                 del self.cache_data[discarded_key]
                 print("DISCARD:", discarded_key)
 
-        self.cache_data[key] = item
+            self.cache_data[key] = item
 
     def get(self, key):
         """ Retrieve an item from the cache """
         if key is None or key not in self.cache_data:
             return None
 
-        # Move the most recently used key to the end (MRU algorithm)
-        del self.cache_data[key]
-        self.cache_data[key] = self.cache_data[key]
+        # Move the most recently used key to the end
+        value = self.cache_data.pop(key)
+        self.cache_data[key] = value
 
-        return self.cache_data[key]
+        return value
