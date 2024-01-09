@@ -3,7 +3,7 @@
 import csv
 import math
 from typing import List
-""" 
+"""
 1-simple_pagination
 
 Module for paginating a database of popular baby names.
@@ -18,6 +18,7 @@ class Server:
     DATA_FILE = "Popular_Baby_Names.csv"
 
     def __init__(self):
+        """ init """
         self.__dataset = None
 
     def dataset(self) -> List[List]:
