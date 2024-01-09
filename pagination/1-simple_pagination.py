@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 
-import csv
-import math
-from typing import List
-
 """
 1-simple_pagination
 
 Module for paginating a database of popular baby names.
 """
 
+
+import csv
+import math
+from typing import List
 index_range = __import__('0-simple_helper_function').index_range
 
 
