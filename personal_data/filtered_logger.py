@@ -10,6 +10,7 @@ from typing import List
 import logging
 import os
 import mysql.connector
+import datetime
 
 PII_FIELDS = ("name", "email", "password", "phone", "ssn")
 
@@ -75,3 +76,31 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
     )
 
     return db
+
+
+def main():
+    """Retrieve all rows in the users table and
+    display each row in a filtered format."""
+    logger = get_logger()
+    db = get_db()
+    cursor = db.cursor()
+
+    # Retrieve all rows in the users table
+    cursor.execute("SELECT * FROM users;")
+    rows = cursor.fetchall()
+
+    # Display each row in a filtered format
+    for row in rows:
+        filtered_row = filter_datum(
+            PII_FIELDS, RedactingFormatter.REDACTION, str(row), ";"
+            )
+        logger.info(
+            "[HOLBERTON] user_data INFO %s: %s;",
+            str(datetime.datetime.now()), filtered_row
+            )
+
+    # Display filtered fields
+    logger.info("Filtered fields:\n%s", "\n".join(PII_FIELDS))
+
+    cursor.close()
+    db.close()
