@@ -8,6 +8,8 @@ function filter_datum that returns the log message obfuscated
 import re
 from typing import List
 import logging
+import os
+import mysql.connector
 
 PII_FIELDS = ("name", "email", "password", "phone", "ssn")
 
@@ -44,12 +46,12 @@ def filter_datum(
 
 def get_logger() -> logging.Logger:
     """Logger named 'user_data'."""
-    logger - logging.getLogger('user_data')
+    logger = logging.getLogger('user_data')
     logger.setLevel(logging.INFO)
     logger.propagate = False
 
     stream_handler = logging.StreamHandler()
-    formatter = RedactingFormatter(fileds=PII_FIELDS)
+    formatter = RedactingFormatter(fields=PII_FIELDS)
     stream_handler.setFormatter(formatter)
 
     logger.addHandler(stream_handler)
@@ -57,5 +59,19 @@ def get_logger() -> logging.Logger:
     return logger
 
 
-if __name__ == "__main__":
-    logger = get_logger()
+def get_db():
+    """Connect to the MySQL database using environment variables."""
+    username = os.getenv('PERSONAL_DATA_DB_USERNAME', 'root')
+    password = os.getenv('PERSONAL_DATA_DB_PASSWORD', '')
+    host = os.getenv('PERSONAL_DATA_DB_HOST', 'localhost')
+    database = os.getenv('PERSONAL_DATA_DB_NAME', 'my_db')
+
+    # Create a connection to the MySQL database
+    db = mysql.connector.connect(
+        user=username,
+        password=password,
+        host=host,
+        database=database
+    )
+
+    return db
