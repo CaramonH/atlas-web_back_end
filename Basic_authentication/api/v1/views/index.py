@@ -34,12 +34,13 @@ def unauthorized_route():
 
 @app_views.route('/forbidden', methods=['GET'], strict_slashes=False)
 def forbidden_route():
+    """ Forbidden route """
     abort(403)
 
 
 @app_views.errorhandler(403)
 def forbidden_error(error):
-    """ Forbidden route """
+    """ Forbidden error """
     response = make_response(jsonify({"error": "Forbidden"}), 403)
     response.headers['Content-Type'] = 'application/json'
     return response
