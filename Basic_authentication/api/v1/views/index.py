@@ -33,6 +33,7 @@ def unauthorized_route():
 
 
 def forbidden_error(error):
+    """ Forbidden route """
     response = make_response(jsonify({"error": "Forbidden"}), 403)
     response.headers['Content-Type'] = 'application/json'
     return response
