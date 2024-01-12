@@ -32,6 +32,11 @@ def unauthorized_route():
     abort(401)
 
 
+@app_views.route('/forbidden', methods=['GET'], strict_slashes=False)
+def forbidden_route():
+    abort(403)
+
+
 @app_views.errorhandler(403)
 def forbidden_error(error):
     """ Forbidden route """
