@@ -23,12 +23,14 @@ if auth_type == "auth":
 
 @app.errorhandler(404)
 def not_found(error) -> str:
-    """ Not found handler """
+    """ Not found handler
+    """
     return jsonify({"error": "Not found"}), 404
 
 
+@app.before_request
 def before_request():
-    """ Unauthorized and Not Found handlers """
+    """ Not found and Unauthorized handlers """
     if auth is None:
         return
 
