@@ -28,6 +28,19 @@ def not_found(error) -> str:
     return jsonify({"error": "Not found"}), 404
 
 
+@app.errorhandler(403)
+def forbidden_error(error) -> str:
+    """ forbidden handler """
+    return jsonify({"error": "Forbidden"}), 403
+
+
+@app.errorhandler(401)
+def unauthorized_error(error) -> str:
+    """ Not authorized handler
+    """
+    return jsonify({"error": "Unauthorized"}), 401
+
+
 @app.before_request
 def before_request():
     """ Not found and Unauthorized handlers """
