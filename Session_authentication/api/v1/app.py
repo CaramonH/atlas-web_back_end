@@ -21,15 +21,13 @@ elif AUTH_TYPE == "basic_auth":
     from api.v1.auth.basic_auth import BasicAuth
     auth = BasicAuth()
 else:
-    from api.v1.auth.auth import Auth
+    from api.v1.auth import Auth
     auth = Auth()
 
 
 @app.before_request
 def before_request_auth():
     """Filter each request before processing."""
-    from api.v1.app import auth
-    
     if auth is None:
         return
 
