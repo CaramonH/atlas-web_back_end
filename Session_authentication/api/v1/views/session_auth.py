@@ -30,7 +30,7 @@ def login():
         return jsonify({"error": "wrong password"}), 401
 
     user_dict = user.to_json()
-    
+
     session_id = auth.create_session(user.id)
     session_cookie_name = os.getenv('SESSION_NAME')
     response = jsonify(user_dict)
