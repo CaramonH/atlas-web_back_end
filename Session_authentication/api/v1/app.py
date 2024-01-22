@@ -62,20 +62,20 @@ def before_request_func() -> None:
             or None for all requests.
             To register a function, use the before_request() decorator.
     """
-    if auth is None:
-        return
-
-    excluded_paths = ['/api/v1/status/',
-                      '/api/v1/unauthorized/', '/api/v1/forbidden/']
-    if not auth.require_auth(request.path, excluded_paths):
-        return
-
-    if auth.authorization_header(request) is None:
-        abort(401)
-
-    request.current_user = auth.current_user(request)
-    if auth.current_user(request) is None:
-        abort(403)
+    path_list = ['/api/v1/status/',
+                 '/api/v1/unauthorized',
+                 '/api/v1/forbidden',
+                 '/api/v1/auth_session/login/']
+    if auth and auth.require_auth(request.path, path_list):
+        if auth.authorization_header(request) is None\
+                and auth.session_cookie(request) is None:
+            abort(401)
+        if auth.authorization_header(request) is None\
+                and auth.session_cookie(request):
+            abort(403)
+        if auth.current_user(request) is None:
+            abort(403)
+        request.current_user = auth.current_user(request)
 
 
 if __name__ == "__main__":
