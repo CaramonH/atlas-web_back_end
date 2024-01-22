@@ -1,68 +1,42 @@
 #!/usr/bin/env python3
-"""
-Session_auth
-"""
-import uuid
-from .auth import Auth
+"""session_auth Flask routes"""
+from flask import request, jsonify, abort
+from api.v1.views import app_views
 from models.user import User
+from os import getenv
+from api.v1.app import auth
 
 
-class SessionAuth(Auth):
-    """ SessionAuth class
+@app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
+def session_login():
+    """testing documenation"""
+    email = request.form.get("email")
+    if not email:
+        return jsonify({"error": "email missing"}), 400
 
-    Args:
-        Auth (class) : Inherits from Auth
-    """
-    user_id_by_session_id = {}
+    password = request.form.get("password")
+    if not password:
+        return jsonify({"error": "password missing"}), 400
 
-    def create_session(self, user_id: str = None) -> str:
-        """ Creates a Session ID for a user_id
+    users = User.search({'email': email})
+    if not users:
+        return jsonify({"error": "no user found for this email"}), 404
 
-        Args:
-            user_id (str, optional): User ID. Defaults to None.
+    user = users[0]
+    if not user.is_valid_password(password):
+        return jsonify({"error": "wrong password"}), 401
 
-        Returns:
-            str: Session ID
-        """
-        if user_id is None:
-            return None
-        if not isinstance(user_id, str):
-            return None
-        # Generate a session ID
-        session_id = str(uuid.uuid4())
-        # Link the user_id to the session_id
-        self.user_id_by_session_id[session_id] = user_id
+    session_id = auth.create_session(user.id)
+    user_json = jsonify(user.to_json())
+    user_json.set_cookie(getenv('SESSION_NAME'), session_id)
 
-        # Return the session ID
-        return session_id
+    return user_json
 
-    def user_id_for_session_id(self, session_id: str = None) -> str:
-        """ Returns a User ID based on a Session ID
 
-        Args:
-            session_id (str, optional): Session ID. Defaults to None.
-
-        Returns:
-            str: User ID or None
-        """
-        if session_id is None:
-            return None
-        if not isinstance(session_id, str):
-            return None
-        # Return the user_id associated with the session_id
-        return self.user_id_by_session_id.get(session_id)
-
-    def current_user(self, request=None):
-        """ Returns a User instance based on a cookie value
-
-        Args:
-            request (_type_, optional): flask request. Defaults to None.
-        """
-        session_id = self.session_cookie(request)
-        if not session_id:
-            return None
-        user_id = self.user_id_for_session_id(session_id)
-        if not user_id:
-            return None
-        # Return the User ID
-        return User.get(user_id)
+@app_views.route('/auth_session/logout',
+                 methods=['DELETE'], strict_slashes=False)
+def logout():
+    """logout user"""
+    if not auth.destroy_session(request):
+        abort(404)
+    return jsonify({}), 200
