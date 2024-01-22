@@ -28,6 +28,8 @@ else:
 @app.before_request
 def before_request_auth():
     """Filter each request before processing."""
+    from api.v1.app import auth
+    
     if auth is None:
         return
 
