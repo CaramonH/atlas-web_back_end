@@ -55,16 +55,11 @@ def before_request():
         '/api/v1/status/',
         '/api/v1/unauthorized/',
         '/api/v1/forbidden/']
-
     if request.path not in excluded_paths and \
             auth.require_auth(request.path, excluded_paths):
-        authorization_header = auth.authorization_header(request)
-        if authorization_header is None:
+        if auth.authorization_header(request) is None:
             abort(401)
-        
-        current_user = auth.current_user(request)
-        request.current_user = current_user  # Assign current_user to request
-        if current_user is None:
+        if auth.current_user(request) is None:
             abort(403)
 
 
