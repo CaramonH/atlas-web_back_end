@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
-
-""" Create a class to manage an API authenication """
-
+"""
+Create a class to manage an API authenication"""
 from flask import request
 from typing import List, TypeVar
 import os
