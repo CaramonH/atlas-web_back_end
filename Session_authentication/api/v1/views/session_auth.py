@@ -3,7 +3,7 @@
 Flask view that handles all routes for session Auth
 """
 from flask import request, jsonify, abort, make_response
-from api.v1.views import app_views as main_app_views
+from api.v1.views import app_views
 from models.user import User
 from os import getenv
 from api.v1.app import auth
