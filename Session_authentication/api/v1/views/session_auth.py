@@ -2,25 +2,26 @@
 """
 Flask view that handles all routes for session Auth
 """
-from flask import request, jsonify, abort
+from flask import request, jsonify, abort, make_response
 from api.v1.views import app_views
 from models.user import User
 from os import getenv
 from api.v1.app import auth
+import os
 
 
 @app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
-def session_login():
-    """testing documenation"""
-    email = request.form.get("email")
+def login():
+    """Route for session authentication"""
+    email = request.form.get('email')
     if not email:
         return jsonify({"error": "email missing"}), 400
 
-    password = request.form.get("password")
+    password = request.form.get('password')
     if not password:
         return jsonify({"error": "password missing"}), 400
 
-    users = User.search({'email': email})
+    users = User.search({"email": email})
     if not users:
         return jsonify({"error": "no user found for this email"}), 404
 
@@ -28,11 +29,16 @@ def session_login():
     if not user.is_valid_password(password):
         return jsonify({"error": "wrong password"}), 401
 
+    user_dict = user.to_json()
+    
     session_id = auth.create_session(user.id)
-    user_json = jsonify(user.to_json())
-    user_json.set_cookie(getenv('SESSION_NAME'), session_id)
+    session_cookie_name = os.getenv('SESSION_NAME')
+    response = jsonify(user_dict)
+    response = make_response(response)
 
-    return user_json
+    response.set_cookie(session_cookie_name, session_id)
+
+    return response
 
 
 @app_views.route('/auth_session/logout',
