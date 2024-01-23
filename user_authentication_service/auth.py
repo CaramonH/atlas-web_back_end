@@ -55,8 +55,7 @@ class Auth:
         return None
 
     def get_user_from_session_id(self, session_id: str):
-        """
-        Get a user from a session ID.
+        """Get a user from a session ID.
         """
         if session_id is None:
             return None
