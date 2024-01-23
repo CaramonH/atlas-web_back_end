@@ -39,9 +39,6 @@ class Auth:
             pass
         return False
 
-    def _generate_uuid(self) -> str:
-        return str(uuid.uuid4())
-
     def _hash_password(self, password: str) -> bytes:
         """Hash a password for storing.
         """
@@ -52,3 +49,9 @@ def _hash_password(password: str) -> bytes:
     """Hash a password so that it can be stored
     """
     return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+
+
+def _generate_uuid(self) -> str:
+    """Generate a new UUID and return as a string
+    """
+    return str(uuid.uuid4())
