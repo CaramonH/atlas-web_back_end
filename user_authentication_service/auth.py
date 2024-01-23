@@ -28,6 +28,8 @@ class Auth:
             return new_user
 
     def valid_login(self, email: str, password: str) -> bool:
+        """Valid Login
+        """
         try:
             user = self._db.find_user_by(email=email)
             if user and bcrypt.checkpw(
@@ -81,10 +83,10 @@ class Auth:
         token = _generate_uuid()
         self._db.update_user(user.id, reset_token=token)
         return token
-    
+
     def update_password(self, reset_token: str, password: str) -> None:
         """ hash the password and update the user’s hashed_password field with
-            the new hashed password and the reset_token field to None """
+            the new password and the reset_token field to None """
         try:
             user = self._db.find_user_by(reset_token=reset_token)
         except NoResultFound:
