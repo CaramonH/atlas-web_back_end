@@ -17,6 +17,8 @@ def welcome():
 
 @app.route('/users', methods=['POST'])
 def users():
+    """ Users
+    """
     try:
         email = request.form.get('email')
         password = request.form.get('password')
