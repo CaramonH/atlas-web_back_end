@@ -1,27 +1,28 @@
 #!/usr/bin/env python3
+#!/usr/bin/env python3
 """
 Route module for the API
 """
+from flask import Flask, jsonify, abort, request
 from os import getenv
 from api.v1.views import app_views
 from flask import Flask, jsonify, abort, request
 from flask_cors import (CORS, cross_origin)
-from api.v1.auth.auth import Auth
 import os
+
 
 app = Flask(__name__)
 app.register_blueprint(app_views)
 CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
-
 AUTH_TYPE = os.getenv("AUTH_TYPE")
-
 if AUTH_TYPE == "session_auth":
     from api.v1.auth.session_auth import SessionAuth
     auth = SessionAuth()
 elif AUTH_TYPE == "basic_auth":
-    from api.v1.auth.basic_auth import BasicAuth
+    from .auth.basic_auth import BasicAuth
     auth = BasicAuth()
 else:
+    from api.v1.auth.auth import Auth
     auth = Auth()
 
 
