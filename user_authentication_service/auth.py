@@ -2,6 +2,7 @@
 """ Auth Model """
 import bcrypt
 
+
 def _hash_password(password: str) -> bytes:
     """Hash a password so that it can be stored
     """
