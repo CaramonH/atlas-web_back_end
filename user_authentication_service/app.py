@@ -9,6 +9,12 @@ app = Flask(__name__)
 AUTH = Auth()
 
 
+@app.route('/', methods=['GET'], strict_slashes=False)
+def welcome():
+    """ Basic Flask app, return a JSON """
+    return jsonify({"message": "Bienvenue"})
+
+
 @app.route('/users', methods=['POST'])
 def users():
     try:
