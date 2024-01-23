@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Basic Flask App"""
-from flask import Flask, jsonify, request, abort, redirect
+from flask import Flask, jsonify, request, abort, redirect, url_for
 import uuid
 
 from auth import Auth
@@ -52,15 +52,17 @@ def login():
         abort(401, "Incorrect login information")
 
 
-@app.route('/sessions', methods=['DELETE'], strict_slashes=False)
+@app.route('/sessions', methods=['DELETE'])
 def logout():
-    """ Log out """
+    """logout"""
     session_id = request.cookies.get('session_id', None)
     user = AUTH.get_user_from_session_id(session_id)
-    if session_id is None or user is None:
+
+    if user is None:
         abort(403)
+
     AUTH.destroy_session(user.id)
-    return redirect('/')
+    return redirect(url_for('welcome'))
 
 
 @app.route('/profile', methods=['GET'], strict_slashes=False)
