@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Basic Flask App"""
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, abort
+import uuid
 
 from auth import Auth
 
@@ -20,6 +21,28 @@ def users():
 
     except ValueError as e:
         return jsonify({"message": str(e)}), 400
+
+
+@app.route('/sessions', methods=['POST'])
+def login():
+    email = request.form.get('email')
+    password = request.form.get('password')
+
+    if not email or not password:
+        abort(400, "Email and password are required")
+
+    try:
+        if AUTH.valid_login(email, password):
+            session_id = str(uuid.uuid4())
+
+            response = jsonify({"email": email, "message": "logged in"})
+            response.set_cookie('session_id', session_id)
+
+            return response
+        else:
+            abort(401, "Incorrect login information")
+    except ValueError:
+        abort(401, "Incorrect login information")
 
 
 if __name__ == "__main__":
