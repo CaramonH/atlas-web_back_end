@@ -63,20 +63,14 @@ def logout():
     return redirect('/')
 
 
-@app.route('/profile', methods=['GET'])
+@app.route('/profile', methods=['GET'], strict_slashes=False)
 def profile():
-    try:
-        session_id = request.cookies.get('session_id')
-        user = AUTH.get_user_from_session_id(session_id)
-
-        if user is None:
-            abort(403)
-
-        return jsonify({"email": user.email}), 200
-
-    except Exception as e:
-        print(f"Error in /profile: {str(e)}")
-        abort(500)  # Internal server error
+    """ User profile """
+    session_id = request.cookies.get('session_id')
+    user = AUTH.get_user_from_session_id(session_id)
+    if session_id is None or user is None:
+        abort(403)
+    return jsonify({"email": user.email}), 200
 
 
 if __name__ == "__main__":
