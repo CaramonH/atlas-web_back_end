@@ -23,6 +23,7 @@ class TestGithubOrgClient(unittest.TestCase):
         mock_get_json.assert_called_once_with(
             f'https://api.github.com/orgs/{org_name}')
 
+    @patch('client.get_json')
     def test_public_repos(self, mock_get_json):
         """  Test result of _public_repos_url"""
         mock_repos_payload = [{'name': 'repo1'}, {'name': 'repo2'}]
