@@ -16,7 +16,8 @@ class TestAccessNestedMap(unittest.TestCase):
     ])
     def test_access_nested_map(self, nested_map, path, expected_result):
         """access_nested_map test method, checks for expected result"""
-        self.assertEqual(access_nested_map(nested_map, path), expected_result)
+        result = access_nested_map(nested_map, path)
+        self.assertEqual(result, expected_result)
 
     @parameterized.expand([
         ({}, ("a",), "Key 'a' not found in nested map"),
