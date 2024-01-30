@@ -54,7 +54,7 @@ def get_locale():
 def index():
     """GET method for index.html"""
     from flask_babel import gettext as _
-    return render_template('/3-index.html')
+    return render_template('/5-index.html')
 
 
 if __name__ == "__main__":
