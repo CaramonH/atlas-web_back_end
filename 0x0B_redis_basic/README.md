@@ -1,0 +1,1 @@
+This is a README for the 0x0B_redis_basic Project from Atlas School
