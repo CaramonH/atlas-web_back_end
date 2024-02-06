@@ -9,6 +9,7 @@ from functools import wraps
 
 
 def count_calls(method: Callable) -> Callable:
+    """INCR a count for the key when the method is called"""
     key = method.__qualname__
 
     @wraps(method)
@@ -19,6 +20,7 @@ def count_calls(method: Callable) -> Callable:
     return wrapper
 
 def call_history(method: Callable) -> Callable:
+    """Store inputs and outputs for a function"""
     inputs_key = f"{method.__qualname__}:inputs"
     outputs_key = f"{method.__qualname__}:outputs"
 
@@ -41,21 +43,25 @@ class Cache:
     @call_history
     @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
+        """Generate a random key and stores data in Redis"""
         key: str = str(uuid.uuid4())
         self._redis.set(key, data)
         return key
 
     def get(self, key: str, fn: Optional[Callable] = None) -> \
             Union[str, bytes, int, float]:
+        """Retrieve a given key value from Redis"""
         value = self._redis.get(key)
         if value is not None and fn:
             value = fn(value)
         return value
 
     def get_str(self, key: str) -> Optional[str]:
+        """Get a string from Redis"""
         value = self.get(key, str)
         return value
 
     def get_int(self, key: str) -> Optional[int]:
+        """Get an int from Redis"""
         value = self.get(key, int)
         return value
