@@ -1,0 +1,1 @@
+This is a README for the MySQL Advanced project at Atlas School :)
