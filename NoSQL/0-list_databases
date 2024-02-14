@@ -1,0 +1,11 @@
+from pymongo import MongoClient
+
+# connect to MongoDB
+client = MongoClient('localhost', 27017)
+
+# list all databases
+databases = client.list_database_names()
+
+# print the databases list
+for db in databases:
+    print(db)
