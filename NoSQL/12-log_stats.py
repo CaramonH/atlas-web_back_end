@@ -15,7 +15,7 @@ def log_stats():
     print(f"{total_logs} logs")
 
     # Display the number of documents per HTTP method
-    methods = ["GET", "POST", "PATCH", "DELETE"]
+    methods = ["GET", "POST", "PUT", "PATCH", "DELETE"]
     print("Methods:")
     for method in methods:
         count = nginx_collection.count_documents({"method": method})
