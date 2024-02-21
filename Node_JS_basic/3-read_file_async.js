@@ -14,7 +14,7 @@ async function countStudents(path) {
     const firstNameIndex = headers.indexOf('firstname');
     // retrieve total number of students
     console.log(`Number of students: ${studentRows.length}`);
-    //group students by field and count them
+    // group students by field and count them
     const studentsByField = studentRows.reduce((acc, row) => {
       const fields = row.split(',');
       const field = fields[fieldIndex];
